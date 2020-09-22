@@ -15,7 +15,7 @@ export class TransactionInput {
   value: number;
 
   @Field(() => String)
-  asm: string;
+  scriptPubKeyHex: string;
 
   @Field(() => String)
   address: string;
