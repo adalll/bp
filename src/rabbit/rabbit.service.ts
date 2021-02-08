@@ -4,11 +4,9 @@ import { RabbitMQClient } from './custom-transport/rm-client';
 
 @Injectable()
 export class RabbitService implements OnModuleInit {
-  constructor(
-    //@Inject('CUSTOM_QUEUE') private readonly customQueue: ClientProxy,
-  ) {
-  }
- // private customClient = new RabbitMQClient(JSON.parse(process.env.RMQ_URLS)[0], 'rpc', 'fanout', ['db', 'wallet'], true, 1, true);
+  constructor() //@Inject('CUSTOM_QUEUE') private readonly customQueue: ClientProxy,
+  {}
+  // private customClient = new RabbitMQClient(JSON.parse(process.env.RMQ_URLS)[0], 'rpc', 'fanout', ['db', 'wallet'], true, 1, true);
 
   async onApplicationBootstrap() {
     //console.log('bootstaraping...');

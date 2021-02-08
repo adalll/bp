@@ -1,7 +1,15 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { litecoin } from './config/network-configs';
-import { bitcoinsv } from './config/network-configs';
-import { account1, account2, account3, account4, utxo, inputs1, outputs1 } from './config/test-data-configs';
+import { bitcoinsv, bitcoincash } from './config/network-configs';
+import {
+  account1,
+  account2,
+  account3,
+  account4,
+  utxo,
+  inputs1,
+  outputs1,
+} from './config/test-data-configs';
 
 const lib = require('bitcoinjs-lib');
 import createHash from 'create-hash';
@@ -12,20 +20,24 @@ import { TransactionForSign } from './types/transaction-for-sign.type';
 
 @Injectable()
 export class BtcService implements OnModuleInit {
-
   private privateKey = account1.privateKey;
   private utxo = utxo;
 
   onModuleInit(): any {
-
     //const data = '{"sum":"50000","fee":"452","inputs":[{"txId":"b188ea4c9e5631e9e5b099d9f28d47ce09d0df92bbffe2fa49f7b0d29fc3cd6b","hex":"01000000000101fef9a4243f8059c52fb8ea5f432dc5db65cb656800a64cbd81f719a9fb98de630100000000f0ffffff03400d0300000000001976a914dbf95284089cdc64d92a1f6ef3ef50a0b396e15988acc71a0c0000000000160014658fa3b17fc277493a0e792bf2e139209cc757c00000000000000000196a1768747470733a2f2f746c74632e6269746170732e636f6d02483045022100b24ae7a9b4427691a28144d94049867a1ff14fe6d4af8ab34e9143cec259e25c02204925f404f49f8e030846d655594590a3cc5ef0a0c727f691b969729a8b3732c30121022183beb67441a0cd53f94a0682cfc12fbd2d1ef44feef38e4a001ca1444dd94900000000","n":0,"value":"200000","address":"n1a4xHRCNYGQhQDA19j83xdXSsM83oFrkx","type":"pubkeyhash","scriptPubKeyHex":"76a914dbf95284089cdc64d92a1f6ef3ef50a0b396e15988ac"}],"outputs":[{"address":"mqdGFzXHixreCSmicjpcV2RBX5TamMM3zL","amount":"50000"},{"address":"mncPSvtVLBTBRxkXUfuKKwQswSw6HXj8Yu","amount":"149548"}]}';
-    const data = '{"sum":"50000","fee":"452","inputs":[{"txId":"b188ea4c9e5631e9e5b099d9f28d47ce09d0df92bbffe2fa49f7b0d29fc3cd6b","hex":"01000000000101fef9a4243f8059c52fb8ea5f432dc5db65cb656800a64cbd81f719a9fb98de630100000000f0ffffff03400d0300000000001976a914dbf95284089cdc64d92a1f6ef3ef50a0b396e15988acc71a0c0000000000160014658fa3b17fc277493a0e792bf2e139209cc757c00000000000000000196a1768747470733a2f2f746c74632e6269746170732e636f6d02483045022100b24ae7a9b4427691a28144d94049867a1ff14fe6d4af8ab34e9143cec259e25c02204925f404f49f8e030846d655594590a3cc5ef0a0c727f691b969729a8b3732c30121022183beb67441a0cd53f94a0682cfc12fbd2d1ef44feef38e4a001ca1444dd94900000000","n":0,"value":"200000","address":"n1a4xHRCNYGQhQDA19j83xdXSsM83oFrkx","type":"pubkeyhash","scriptPubKeyHex":"76a914dbf95284089cdc64d92a1f6ef3ef50a0b396e15988ac"}],"outputs":[{"address":"mqdGFzXHixreCSmicjpcV2RBX5TamMM3zL","amount":"50000"},{"address":"n1a4xHRCNYGQhQDA19j83xdXSsM83oFrkx","amount":"149548"}]}';
+    const data =
+      '{"sum":"0.00002222","fee":"0.00000226","inputs":[{"txId":"2890b9c88dbf4f45dddfdd12fb0514725184083230e56590840acfbdb1eaa139","hex":"020000000183e456644889b8fc23bc40b856b1749cd62bd0d2a6870de18e43ce05c8f86e87000000006a473044022052a7de892385cbc5aa0cb350237de22110441fb9a514205a7726ba63308bb7240220268b8b4f0b072e9457aada3b8791a27fba5db83005a95e497fee511b786d71ee4121033ee6aaf63904f06aaa811e568d6601867fb08438c5b5c01d01b1527e3367b782ffffffff02946d6b27020000001976a91497a808f1d39ae863ed78500504780e2ca0c21b7288ac80969800000000001976a9142b6be58d677b495e9f1e30de3bec3260dfebe96188ac00000000","n":1,"value":"10000000","address":"bchtest:qq4khevdvaa5jh5lrccduwlvxfsdl6lfvy7peukxzh","type":"pubkeyhash","scriptPubKeyHex":"76a9142b6be58d677b495e9f1e30de3bec3260dfebe96188ac"}],"outputs":[{"address":"bchtest:pqnqv9lt7e5vjyp0w88zf2af0l92l8rxdghdzfvj4e","amount":"2222"},{"address":"bchtest:qq4khevdvaa5jh5lrccduwlvxfsdl6lfvy7peukxzh","amount":"9997552"}]}';
 
-    const pkey = JSON.stringify({ 'n1a4xHRCNYGQhQDA19j83xdXSsM83oFrkx': 'cUnTHCW9ANikp5t1eXF6a39qUQb4ombmLXqiDHUTfk2JCHHXtot2' });
-    const pkey_bsv = JSON.stringify({ 'n1a4xHRCNYGQhQDA19j83xdXSsM83oFrkx': 'cUnTHCW9ANikp5t1eXF6a39qUQb4ombmLXqiDHUTfk2JCHHXtot2' });
+    const pkey = JSON.stringify({
+      n1a4xHRCNYGQhQDA19j83xdXSsM83oFrkx:
+        'cUnTHCW9ANikp5t1eXF6a39qUQb4ombmLXqiDHUTfk2JCHHXtot2',
+    });
+    const pkey_bch = JSON.stringify({
+      'bchtest:qq4khevdvaa5jh5lrccduwlvxfsdl6lfvy7peukxzh':
+        'cUhQbRTZwoiWQvyV7MGxoT7196igv4csSBkP8S7KrrtJuiA6aA4f',
+    });
 
-    const hex = this.sign(data, pkey, true);
-
+    const hex = this.sign(data, pkey_bch, true);
 
     console.log('hex', hex);
     // //const wifi = ECPair.toWIF('03450cc14421e64896fc7f96320083d1a50b66b1ec9a75ed2b533338dc7ea8d0ce');
@@ -49,13 +61,17 @@ export class BtcService implements OnModuleInit {
     // console.log(signedTx);
   }
 
-  sign(data: string, privateKey: string, isTx = true): string {
+  isValidAddress(address: string): boolean {
+    const regex = new RegExp(/^[a-z1-5]{12}$/g);
+    return regex.test(address); /* || eosUtil.PublicKey.isValid(address) */
+  }
 
+  sign(data: string, privateKey: string, isTx = true): string {
     if (isTx) {
       const dataObj = JSON.parse(data);
       const mapPrivateKeys = JSON.parse(privateKey);
       let signedHex = '';
-      const tx = new lib.Psbt({ network: litecoin.testnet });
+      const tx = new lib.Psbt({ network: bitcoincash.testnet });
       for (const input of dataObj.inputs) {
         if (input.type.includes('witness')) {
           tx.addInput({
@@ -67,14 +83,11 @@ export class BtcService implements OnModuleInit {
             },
           });
         } else {
-          console.log(input);
+          //console.log(input);
           tx.addInput({
             hash: input.txId,
             index: input.n,
-            nonWitnessUtxo: Buffer.from(
-              input.hex,
-              'hex',
-            ),
+            nonWitnessUtxo: Buffer.from(input.hex, 'hex'),
           });
         }
       }
@@ -88,7 +101,7 @@ export class BtcService implements OnModuleInit {
       for (const [index, input] of dataObj.inputs.entries()) {
         const keyPair = lib.ECPair.fromWIF(
           mapPrivateKeys[input.address],
-          litecoin.testnet,
+          bitcoincash.testnet,
         );
         tx.signInput(index, keyPair);
         tx.validateSignaturesOfInput(index);
@@ -98,8 +111,7 @@ export class BtcService implements OnModuleInit {
       return signedHex;
     }
 
-
-    const key = ECPair.fromWIF(privateKey, litecoin.testnet);
+    const key = ECPair.fromWIF(privateKey, bitcoincash.testnet);
     const hash = createHash('sha256')
       .update(data)
       .digest('hex');
@@ -163,7 +175,6 @@ export class BtcService implements OnModuleInit {
   //   return signedHex;
   // }
 
-
   // onModuleInit(): any {
   //   const mapPrivateKeys = new Map();
   //   mapPrivateKeys.set('n1a4xHRCNYGQhQDA19j83xdXSsM83oFrkx', 'cUnTHCW9ANikp5t1eXF6a39qUQb4ombmLXqiDHUTfk2JCHHXtot2');
@@ -183,7 +194,6 @@ export class BtcService implements OnModuleInit {
   //   const signedHex = this.sign(rawTx, this.privateKey, true);
   //   console.log(signedHex);
   // }
-
 
   // createRawTransaction(utxo: any, network: any) {
   //
@@ -231,7 +241,6 @@ export class BtcService implements OnModuleInit {
   // }
 }
 
-
 // const key = ECPair.fromWIF(this.privateKey, NetworkConfig.);
 // const hash = createHash('sha256')
 //   .update(data)
@@ -266,7 +275,6 @@ export class BtcService implements OnModuleInit {
 //     value: 90000,
 //   },
 // });
-
 
 //     const isSegwit = rawTransaction.substring(8, 12) === '0001';
 //     if (isSegwit) {
@@ -306,6 +314,3 @@ export class BtcService implements OnModuleInit {
 //     });
 // // create transaction end
 //
-
-
-

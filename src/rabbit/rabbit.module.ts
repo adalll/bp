@@ -22,6 +22,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
   ],
   providers: [RabbitService],
   controllers: [RabbitController],
-  exports: []
+  exports: [],
 })
 export class RabbitModule {}

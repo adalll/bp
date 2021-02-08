@@ -1,9 +1,14 @@
 import { Controller } from '@nestjs/common';
-import { Ctx, EventPattern, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
+import {
+  Ctx,
+  EventPattern,
+  MessagePattern,
+  Payload,
+  RmqContext,
+} from '@nestjs/microservices';
 
 @Controller('rabbit')
 export class RabbitController {
-
   @EventPattern('block')
   async handleBlock(
     @Payload() data: { pattern: string; data: any },

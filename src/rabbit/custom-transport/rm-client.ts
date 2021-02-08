@@ -2,7 +2,6 @@ import * as amqp from 'amqplib';
 import { ClientProxy, ReadPacket, WritePacket } from '@nestjs/microservices';
 
 export class RabbitMQClient extends ClientProxy {
-
   constructor(
     private readonly host: string,
     private readonly exchange: string,
@@ -18,13 +17,21 @@ export class RabbitMQClient extends ClientProxy {
   private server: amqp.Connection = null;
   private channel: amqp.Channel = null;
 
-  async sendToExchange<TResult = any, TInput = any>(pattern: any, data: TInput): Promise<void> {
+  async sendToExchange<TResult = any, TInput = any>(
+    pattern: any,
+    data: TInput,
+  ): Promise<void> {
     try {
-      this.channel && await this.channel.publish(this.exchange, '', Buffer.from(JSON.stringify({ pattern, data })));
+      this.channel &&
+        (await this.channel.publish(
+          this.exchange,
+          '',
+          Buffer.from(JSON.stringify({ pattern, data })),
+        ));
     } catch (e) {
       console.log('rabbitMQ server not connected: ', e.message);
     }
-  };
+  }
 
   async connect(): Promise<any> {
     this.server = await amqp.connect(this.host);
@@ -42,7 +49,10 @@ export class RabbitMQClient extends ClientProxy {
     this.server && this.server.close();
   }
 
-  protected publish(packet: ReadPacket<any>, callback: (packet: WritePacket<any>) => void): Function {
+  protected publish(
+    packet: ReadPacket<any>,
+    callback: (packet: WritePacket<any>) => void,
+  ): Function {
     throw new Error('Method not implemented.');
   }
 
@@ -50,5 +60,4 @@ export class RabbitMQClient extends ClientProxy {
     throw new Error('Method not implemented.');
     return Promise.resolve(undefined);
   }
-
 }

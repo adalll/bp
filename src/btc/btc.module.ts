@@ -4,6 +4,6 @@ import { BtcController } from './btc.controller';
 
 @Module({
   providers: [BtcService],
-  controllers: [BtcController]
+  controllers: [BtcController],
 })
 export class BtcModule {}

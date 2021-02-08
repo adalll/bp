@@ -6,9 +6,7 @@ export class RabbitMQServer extends Server implements CustomTransportStrategy {
   private server: amqp.Connection = null;
   private channel: amqp.Channel = null;
 
-  constructor(
-    private readonly host: string,
-    private readonly queue: string) {
+  constructor(private readonly host: string, private readonly queue: string) {
     super();
   }
 
@@ -25,7 +23,6 @@ export class RabbitMQServer extends Server implements CustomTransportStrategy {
   }
 
   private async handleMessage(message) {
-
     console.log('got the message: ', message.content.toString());
 
     const { content } = message;
@@ -42,12 +39,13 @@ export class RabbitMQServer extends Server implements CustomTransportStrategy {
     }
 
     const handler = this.messageHandlers.get(pattern);
-    const response$ = this.transformToObservable(await handler(messageObj.data)) as Observable<any>;
+    const response$ = this.transformToObservable(
+      await handler(messageObj.data),
+    ) as Observable<any>;
 
     response$.subscribe(res => console.log('from controller observable', res));
-    response$ && this.send(response$, (data) => this.sendMessage(data));
+    response$ && this.send(response$, data => this.sendMessage(data));
     this.channel.ack(message);
-
   }
 
   public sendMessage(message) {

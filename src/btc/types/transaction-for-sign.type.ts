@@ -5,7 +5,6 @@ import { TransactionInput } from './transaction-input.type';
 
 @ObjectType()
 export class TransactionForSign {
-
   @Field(() => Number)
   fee: number;
 
